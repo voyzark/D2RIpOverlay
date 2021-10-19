@@ -42,11 +42,11 @@ namespace Diablo2IpFinder
         public void ReadSettings()
         {
             var ignoredIpAddresses = ((string[])ReadKeyOrDefault(m_RegistryPath, nameof(IgnoredIpAddresses), Array.Empty<string>()))
-                                        .Select(addr => IPAddress.TryParse(addr, out IPAddress outAddr) ? outAddr : null)
+                                        .Select(addr => IPAddress.TryParse(addr, out IPAddress parsedAddr) ? parsedAddr : null)
                                         .Where(addr => addr != null);
 
             var observedIpAddresses = ((string[])ReadKeyOrDefault(m_RegistryPath, nameof(ObservedIpAddresses), Array.Empty<string>()))
-                                        .Select(addr => IPAddress.TryParse(addr, out IPAddress outAddr) ? outAddr : null)
+                                        .Select(addr => IPAddress.TryParse(addr, out IPAddress parsedAddr) ? parsedAddr : null)
                                         .Where(addr => addr != null && !ignoredIpAddresses.Contains(addr));
 
             IgnoredIpAddresses = ObservableHashSet<IPAddress>.FromIEnumerable(ignoredIpAddresses);
@@ -71,7 +71,7 @@ namespace Diablo2IpFinder
             Registry.SetValue(m_RegistryPath, nameof(OverlayHeight), OverlayHeight);
         }
 
-        private object ReadKeyOrDefault(string keyName, string? valueName, object? defaultValue)
+        private object ReadKeyOrDefault(string keyName, string valueName, object defaultValue)
         {
             var ret = Registry.GetValue(keyName, valueName, defaultValue);
             return (ret is null) ? defaultValue : ret;
