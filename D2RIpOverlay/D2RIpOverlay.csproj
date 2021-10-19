@@ -11,6 +11,7 @@
     <Copyright>Copyright (c) 2021 Jan Zwirner</Copyright>
     <PackageLicenseExpression />
     <PackageLicenseFile>License.txt</PackageLicenseFile>
+    <StartupObject>Diablo2IpFinder.App</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
