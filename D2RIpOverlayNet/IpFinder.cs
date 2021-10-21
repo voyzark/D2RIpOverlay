@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading;
@@ -18,6 +19,7 @@ namespace Diablo2IpFinder
         private bool m_InGame = false;
         private int m_InGameTime = 0;
         private System.Timers.Timer m_InGameTimer;
+        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public IPAddress TargetIp { get; set; }
         public ObservableHashSet<IPAddress> ObservedIpAddresses { get; set; }
@@ -69,21 +71,34 @@ namespace Diablo2IpFinder
         {
             while (true)
             {
-                UpdateIps();
-                // SynchronizeCollections();
-                UpdateTimer();
-                UpdateOverlay();
+                try
+                {
+                    log.Debug("<-- Main Loop");
+                    // UpdateIps();
+                    UpdateIpsNetstat();
+                    SynchronizeCollections();
+                    UpdateTimer();
+                    UpdateOverlay();
 
-                Thread.Sleep(200);
+                    Thread.Sleep(200);
+                    log.Debug("--> Main Loop");
+                } catch (Exception e)
+                {
+                    continue;
+                }
+
             }
         }
 
-
-        private void UpdateIps()
+        private void UpdateIpsNetstat()
         {
-            var observedIPs = NetInformation.GetAllTcpConnections()
-                                            .Where(x => x.OwnerProcessName == m_DiabloExecutable && !x.RemoteAddress.Equals(IPAddress.Parse("127.0.0.1")))
-                                            .Select(x => x.RemoteAddress);
+            var procId = Process.GetProcessesByName("D2R").First().Id;
+
+            log.Debug("<-- UpdateIpsNetstat");
+
+            log.Info("(UpdateIpsNetstat) Getting Associated IPs");
+            var observedIPs = Netstat.GetTcpConnections(procId).Select(x => x.RemoteAddress);
+            log.Info($"(UpdateIpsNetstat) Found {observedIPs.Count()} IPs");
 
             CurrentIpAddresses.Clear();
 
@@ -91,10 +106,44 @@ namespace Diablo2IpFinder
             {
                 if (!IgnoredIpAddresses.Contains(ipAddr))
                 {
+                    log.Debug($"(UpdateIpsNetstat) {ipAddr} is not ignored");
                     ObservedIpAddresses.Add(ipAddr);
                     CurrentIpAddresses.Add(ipAddr);
                 }
+                else
+                {
+                    log.Debug($"(UpdateIpsNetstat) {ipAddr} is ignored");
+                }
             }
+            log.Debug("--> UpdateIpsNetstat");
+        }
+
+
+        private void UpdateIps()
+        {
+            log.Debug("<-- UpdateIps");
+            
+            log.Info("(UpdateIps) Getting Associated IPs");
+            var observedIPs = NetInformation.GetAllTcpConnections()
+                                            .Where(x => x.OwnerProcessName == m_DiabloExecutable && !x.RemoteAddress.Equals(IPAddress.Parse("127.0.0.1")))
+                                            .Select(x => x.RemoteAddress);
+            log.Info($"(UpdateIps) Found {observedIPs.Count()} IPs");
+            
+            CurrentIpAddresses.Clear();
+            
+            foreach (var ipAddr in observedIPs)
+            {
+                if (!IgnoredIpAddresses.Contains(ipAddr))
+                {
+                    log.Debug($"(UpdateIps) {ipAddr} is not ignored");
+                    ObservedIpAddresses.Add(ipAddr);
+                    CurrentIpAddresses.Add(ipAddr);
+                } else
+                {
+                    log.Debug($"(UpdateIps) {ipAddr} is ignored");
+                }
+            }
+            log.Debug("--> UpdateIps");
         }
 
         private void SynchronizeCollections()

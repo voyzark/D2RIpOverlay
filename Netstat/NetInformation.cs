@@ -26,7 +26,7 @@ namespace NetstatD2
                 ref buffSize,
                 true,
                 AF_INET,
-                TCP_TABLE_CLASS.TCP_TABLE_OWNER_PID_ALL,
+                TCP_TABLE_CLASS.TCP_TABLE_OWNER_PID_CONNECTIONS,
                 0);
             if (ret != 0 && ret != 122) // 122 insufficient buffer size
                 throw new Exception("bad ret on check " + ret);
@@ -36,9 +36,9 @@ namespace NetstatD2
             {
                 ret = GetExtendedTcpTable(buffTable,
                     ref buffSize,
-                    true,
+                    false,
                     AF_INET,
-                    TCP_TABLE_CLASS.TCP_TABLE_OWNER_PID_ALL,
+                    TCP_TABLE_CLASS.TCP_TABLE_OWNER_PID_CONNECTIONS,
                     0);
                 if (ret != 0)
                     throw new Exception("bad ret " + ret);
