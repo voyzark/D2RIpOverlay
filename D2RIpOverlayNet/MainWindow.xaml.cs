@@ -143,6 +143,7 @@ namespace Diablo2IpFinder
 
         private void Window_Closing(object sender, CancelEventArgs e)
         {
+            m_Finder.HideOverlay();
             m_AppSettings.WriteSettings();
             Application.Current.Shutdown();
         }
