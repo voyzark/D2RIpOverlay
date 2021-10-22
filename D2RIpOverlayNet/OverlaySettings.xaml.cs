@@ -17,6 +17,7 @@ namespace Diablo2IpFinder
         private int m_Y;
         private int m_Width;
         private int m_Height;
+        private bool m_OverlayBackgroundTransparent;
 
         public OverlaySettings()
         {
@@ -26,11 +27,13 @@ namespace Diablo2IpFinder
             m_Y = m_AppSettings.OverlayY;
             m_Width = m_AppSettings.OverlayWidth;
             m_Height = m_AppSettings.OverlayHeight;
+            m_OverlayBackgroundTransparent = m_AppSettings.OverlayBackgroundVisible;
 
             tbX.Text = $"{m_X}";
             tbY.Text = $"{m_Y}";
             tbW.Text = $"{m_Width}";
             tbH.Text = $"{m_Height}";
+            cbTv.IsChecked = m_OverlayBackgroundTransparent;
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -75,11 +78,13 @@ namespace Diablo2IpFinder
             m_Y = y;
             m_Width = w;
             m_Height = h;
+            m_OverlayBackgroundTransparent = cbTv.IsChecked is null ? true : (bool)cbTv.IsChecked;
 
             m_AppSettings.OverlayX = m_X;
             m_AppSettings.OverlayY = m_Y;
             m_AppSettings.OverlayWidth = m_Width;
             m_AppSettings.OverlayHeight = m_Height;
+            m_AppSettings.OverlayBackgroundVisible = m_OverlayBackgroundTransparent;
 
             tbX.Background = Brushes.White;
             tbY.Background = Brushes.White;

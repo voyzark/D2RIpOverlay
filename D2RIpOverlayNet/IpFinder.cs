@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using NetstatD2;
+using NetstatWrapper;
 
 namespace Diablo2IpFinder
 {
@@ -30,6 +30,7 @@ namespace Diablo2IpFinder
         public int OverlayY { get; set; }
         public int OverlayWidth { get; set; }
         public int OverlayHeight { get; set; }
+        public bool OverlayBackgroundVisible { get; set; }
         public string InGameTime
         {
             get
@@ -43,7 +44,7 @@ namespace Diablo2IpFinder
 
         public OverlayWindow D2Overlay { get; set; }
 
-        public IpFinder(int x, int y, int width, int height)
+        public IpFinder(int x, int y, int width, int height, bool bgVisible)
         {
             ObservedIpAddresses = new ObservableHashSet<IPAddress>();
             IgnoredIpAddresses = new ObservableHashSet<IPAddress>();
@@ -53,8 +54,9 @@ namespace Diablo2IpFinder
             OverlayY = y;
             OverlayWidth = width;
             OverlayHeight = height;
+            OverlayBackgroundVisible = bgVisible;
 
-            D2Overlay = new OverlayWindow(OverlayX, OverlayY, OverlayWidth, OverlayHeight);
+            D2Overlay = new OverlayWindow(OverlayX, OverlayY, OverlayWidth, OverlayHeight, OverlayBackgroundVisible);
             Task.Run(() => D2Overlay.Run());
 
             m_InGameTimer = new System.Timers.Timer(1000);
@@ -71,34 +73,23 @@ namespace Diablo2IpFinder
         {
             while (true)
             {
-                try
-                {
-                    log.Debug("<-- Main Loop");
-                    // UpdateIps();
-                    UpdateIpsNetstat();
-                    SynchronizeCollections();
-                    UpdateTimer();
-                    UpdateOverlay();
+                UpdateIpsNetstat();
+                SynchronizeCollections();
+                UpdateTimer();
+                UpdateOverlay();
 
-                    Thread.Sleep(200);
-                    log.Debug("--> Main Loop");
-                } catch (Exception e)
-                {
-                    continue;
-                }
-
+                Thread.Sleep(200);
             }
         }
 
         private void UpdateIpsNetstat()
         {
-            var procId = Process.GetProcessesByName("D2R").First().Id;
+            var procId = Process.GetProcessesByName(m_DiabloExecutable).First().Id;
 
-            log.Debug("<-- UpdateIpsNetstat");
-
-            log.Info("(UpdateIpsNetstat) Getting Associated IPs");
-            var observedIPs = Netstat.GetTcpConnections(procId).Select(x => x.RemoteAddress);
-            log.Info($"(UpdateIpsNetstat) Found {observedIPs.Count()} IPs");
+            var observedIPs = Netstat.GetExtendedTcpTable()
+                                     .Where(con => !Helpers.IsFilteredIp(con.RemoteAddress) && 
+                                            con.ProcessId == procId)
+                                     .Select(con => con.RemoteAddress);
 
             CurrentIpAddresses.Clear();
 
@@ -106,44 +97,10 @@ namespace Diablo2IpFinder
             {
                 if (!IgnoredIpAddresses.Contains(ipAddr))
                 {
-                    log.Debug($"(UpdateIpsNetstat) {ipAddr} is not ignored");
                     ObservedIpAddresses.Add(ipAddr);
                     CurrentIpAddresses.Add(ipAddr);
                 }
-                else
-                {
-                    log.Debug($"(UpdateIpsNetstat) {ipAddr} is ignored");
-                }
             }
-            log.Debug("--> UpdateIpsNetstat");
-        }
-
-
-        private void UpdateIps()
-        {
-            log.Debug("<-- UpdateIps");
-            
-            log.Info("(UpdateIps) Getting Associated IPs");
-            var observedIPs = NetInformation.GetAllTcpConnections()
-                                            .Where(x => x.OwnerProcessName == m_DiabloExecutable && !x.RemoteAddress.Equals(IPAddress.Parse("127.0.0.1")))
-                                            .Select(x => x.RemoteAddress);
-            log.Info($"(UpdateIps) Found {observedIPs.Count()} IPs");
-            
-            CurrentIpAddresses.Clear();
-            
-            foreach (var ipAddr in observedIPs)
-            {
-                if (!IgnoredIpAddresses.Contains(ipAddr))
-                {
-                    log.Debug($"(UpdateIps) {ipAddr} is not ignored");
-                    ObservedIpAddresses.Add(ipAddr);
-                    CurrentIpAddresses.Add(ipAddr);
-                } else
-                {
-                    log.Debug($"(UpdateIps) {ipAddr} is ignored");
-                }
-            }
-            log.Debug("--> UpdateIps");
         }
 
         private void SynchronizeCollections()
@@ -193,6 +150,6 @@ namespace Diablo2IpFinder
         public void HideOverlay() => D2Overlay.Hide();
         public void ShowOverlay() => D2Overlay.Show();
 
-        public void RearrangeOverlay() => D2Overlay.Rearrange(OverlayX, OverlayY, OverlayWidth, OverlayHeight);
+        public void RearrangeOverlay() => D2Overlay.Rearrange(OverlayX, OverlayY, OverlayWidth, OverlayHeight, OverlayBackgroundVisible);
     }
 }

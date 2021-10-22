@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Microsoft.Win32;
@@ -32,6 +33,7 @@ namespace Diablo2IpFinder
         public int OverlayY { get; set; }
         public int OverlayWidth { get; set; }
         public int OverlayHeight { get; set; }
+        public bool OverlayBackgroundVisible { get; set; }
 
 
         private AppSettings()
@@ -58,6 +60,7 @@ namespace Diablo2IpFinder
             OverlayY = (int)ReadKeyOrDefault(m_RegistryPath, nameof(OverlayY), 0);
             OverlayWidth = (int)ReadKeyOrDefault(m_RegistryPath, nameof(OverlayWidth), 250);
             OverlayHeight = (int)ReadKeyOrDefault(m_RegistryPath, nameof(OverlayHeight), 120);
+            OverlayBackgroundVisible = Boolean.Parse(ReadKeyOrDefault(m_RegistryPath, nameof(OverlayBackgroundVisible), true).ToString());
         }
 
         public void WriteSettings()
@@ -69,6 +72,7 @@ namespace Diablo2IpFinder
             Registry.SetValue(m_RegistryPath, nameof(OverlayY), OverlayY);
             Registry.SetValue(m_RegistryPath, nameof(OverlayWidth), OverlayWidth);
             Registry.SetValue(m_RegistryPath, nameof(OverlayHeight), OverlayHeight);
+            Registry.SetValue(m_RegistryPath, nameof(OverlayBackgroundVisible), OverlayBackgroundVisible);
         }
 
         private object ReadKeyOrDefault(string keyName, string valueName, object defaultValue)

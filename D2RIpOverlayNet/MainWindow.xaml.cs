@@ -23,6 +23,7 @@ namespace Diablo2IpFinder
             InitializeComponent();
             InititalizeData();
 
+            // tbSetIpStatus.FontFamily = 
 
             DataContext = m_Finder;
 
@@ -33,7 +34,7 @@ namespace Diablo2IpFinder
         {
             btnToggleOverlay.Tag = true;
 
-            m_Finder = new IpFinder(m_AppSettings.OverlayX, m_AppSettings.OverlayY, m_AppSettings.OverlayWidth, m_AppSettings.OverlayHeight)
+            m_Finder = new IpFinder(m_AppSettings.OverlayX, m_AppSettings.OverlayY, m_AppSettings.OverlayWidth, m_AppSettings.OverlayHeight, m_AppSettings.OverlayBackgroundVisible)
             {
                 ObservedIpAddresses = m_AppSettings.ObservedIpAddresses,
                 IgnoredIpAddresses = m_AppSettings.IgnoredIpAddresses,
@@ -51,6 +52,7 @@ namespace Diablo2IpFinder
             m_Finder.OverlayY = m_AppSettings.OverlayY;
             m_Finder.OverlayWidth = m_AppSettings.OverlayWidth;
             m_Finder.OverlayHeight = m_AppSettings.OverlayHeight;
+            m_Finder.OverlayBackgroundVisible = m_AppSettings.OverlayBackgroundVisible;
 
             m_Finder.RearrangeOverlay();
         }

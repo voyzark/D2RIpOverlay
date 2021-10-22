@@ -24,8 +24,10 @@
         <Style TargetType="TextBlock">
             <Setter Property="Margin" Value="5,0,0,0" />
         </Style>
+
+        <FontFamily x:Key="DiabloFont">pack://application:,,,/Fonts/#Exocet</FontFamily>
     </Window.Resources>
-    
+
     <Grid>
         <!--#region Grid.Column / Row Definitions-->
         <Grid.ColumnDefinitions>
@@ -42,7 +44,7 @@
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
         <!--#endregion-->
-        
+
         <GroupBox Grid.Column="1" Grid.Row="1" Header="Target IP">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -57,8 +59,7 @@
                 <TextBox x:Name="tbTargetIp" TextChanged="TargetIp_TextChanged"/>
                 <Button x:Name="btnSetIp" Content="Set" Grid.Column="1" Click="SetIp_Click" />
 
-                <TextBlock x:Name="tbSetIpStatus" Grid.Row="1" 
-                        d:Text="Target IP is not set"/>
+                <TextBlock x:Name="tbSetIpStatus" Text="This is a Test" Grid.Row="1" />
             </Grid>
         </GroupBox>
 
@@ -101,7 +102,7 @@
                     <Button Content=">" Margin="5,0,5,5" Click="MoveIpRight_Click"/>
                     <Button Content="&lt;" Click="MoveIpLeft_Click" />
                 </StackPanel>
-            </Grid>                
+            </Grid>
         </GroupBox>
 
         <GroupBox Header="Overlay" Grid.Column="2" Grid.Row="1">
@@ -110,7 +111,7 @@
                     <RowDefinition Height="auto" />
                     <RowDefinition Height="auto" />
                 </Grid.RowDefinitions>
-                
+
                 <Button  x:Name="btnToggleOverlay" Grid.Row="0" Grid.Column="6" Content="Hide" Click="ToggleOverlay_Click"
                          Width="90" />
 

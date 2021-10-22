@@ -38,9 +38,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup>
     <PackageReference Include="Microsoft.PowerShell.5.ReferenceAssemblies" Version="1.1.0" />
     <Reference Include="Costura, Version=5.6.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -224,18 +222,19 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DxFontLoader\FontConverter.cs" />
+    <Compile Include="DxFontLoader\ResourceFontFileEnumerator.cs" />
+    <Compile Include="DxFontLoader\ResourceFontFileStream.cs" />
+    <Compile Include="DxFontLoader\ResourceFontLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppSettings.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="D2OverlayWindow2.cs" />
-    <Compile Include="Example.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="IpFinder.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Netstat.cs" />
     <Compile Include="ObservableHashSet.cs" />
     <Compile Include="OverlaySettings.xaml.cs">
       <DependentUpon>OverlaySettings.xaml</DependentUpon>
@@ -258,7 +257,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="app.manifest" />
+    <EmbeddedResource Include="Fonts\films.EXH_____.ttf" />
+    <EmbeddedResource Include="Fonts\films.EXL_____.ttf" />
     <None Include="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -282,11 +282,12 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Netstat\Netstat.csproj">
-      <Project>{c4529209-aa00-4998-859a-61f7574ca237}</Project>
-      <Name>Netstat</Name>
+    <ProjectReference Include="..\NetstatWrapper\NetstatWrapper.csproj">
+      <Project>{96075395-C326-43CB-BD2D-AB8363BFC7BB}</Project>
+      <Name>NetstatWrapper</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
