@@ -59,8 +59,8 @@ namespace Diablo2IpFinder
             OverlayX = (int)ReadKeyOrDefault(m_RegistryPath, nameof(OverlayX), 0);
             OverlayY = (int)ReadKeyOrDefault(m_RegistryPath, nameof(OverlayY), 0);
             OverlayWidth = (int)ReadKeyOrDefault(m_RegistryPath, nameof(OverlayWidth), 250);
-            OverlayHeight = (int)ReadKeyOrDefault(m_RegistryPath, nameof(OverlayHeight), 120);
-            OverlayBackgroundVisible = Boolean.Parse(ReadKeyOrDefault(m_RegistryPath, nameof(OverlayBackgroundVisible), true).ToString());
+            OverlayHeight = (int)ReadKeyOrDefault(m_RegistryPath, nameof(OverlayHeight), 58);
+            OverlayBackgroundVisible = Boolean.Parse(ReadKeyOrDefault(m_RegistryPath, nameof(OverlayBackgroundVisible), false).ToString());
         }
 
         public void WriteSettings()

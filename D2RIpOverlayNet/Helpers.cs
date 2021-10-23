@@ -7,10 +7,10 @@ namespace Diablo2IpFinder
 {
     static class Helpers
     {
-        private static readonly Regex validIpSchema = new Regex(@"^(?:[0-9]{1,3}\.){3}([0-9]{1,3})$");
-        private static readonly IPAddress Localhost = IPAddress.Parse("127.0.0.1");
+        private static readonly Regex m_ValidIpSchema = new Regex(@"^(?:[0-9]{1,3}\.){3}([0-9]{1,3})$");
+        private static readonly IPAddress m_Localhost = IPAddress.Parse("127.0.0.1");
 
-        private static readonly Regex FilteredIpRanges = new Regex(
+        private static readonly Regex m_FilteredIpRanges = new Regex(
             @"(?:^127\.0\.0\.1)" + "|" +
             @"(?:^24\.105\.29\.76)" + "|" +
             @"(?:^34\.117\.122\.6)" + "|" +
@@ -23,7 +23,7 @@ namespace Diablo2IpFinder
 
         public static bool IsValidIp(string ipAddress)
         {
-            var match = validIpSchema.Match(ipAddress);
+            var match = m_ValidIpSchema.Match(ipAddress);
             return match.Success && Int32.Parse(match.Groups[1].Value) > 0;
         }
 
@@ -35,8 +35,8 @@ namespace Diablo2IpFinder
             return IPAddress.Parse(ipAddress).ToString();
         }
 
-        public static bool IsLocalhost(IPAddress ipAddr) => IPAddress.Equals(ipAddr, Localhost);
+        public static bool IsLocalhost(IPAddress ipAddr) => IPAddress.Equals(ipAddr, m_Localhost);
 
-        public static bool IsFilteredIp(IPAddress ipAddr) => FilteredIpRanges.IsMatch(ipAddr.ToString());
+        public static bool IsFilteredIp(IPAddress ipAddr) => m_FilteredIpRanges.IsMatch(ipAddr.ToString());
     }
 }

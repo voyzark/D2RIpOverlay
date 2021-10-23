@@ -219,14 +219,13 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AppSettings.cs" />
     <Compile Include="DxFontLoader\FontConverter.cs" />
     <Compile Include="DxFontLoader\ResourceFontFileEnumerator.cs" />
     <Compile Include="DxFontLoader\ResourceFontFileStream.cs" />
     <Compile Include="DxFontLoader\ResourceFontLoader.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AppSettings.cs" />
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="IpFinder.cs" />
     <Compile Include="MainWindow.xaml.cs">

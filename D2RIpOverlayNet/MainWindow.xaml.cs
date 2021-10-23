@@ -23,8 +23,6 @@ namespace Diablo2IpFinder
             InitializeComponent();
             InititalizeData();
 
-            // tbSetIpStatus.FontFamily = 
-
             DataContext = m_Finder;
 
             Task.Run(() => m_Finder.MainLoop());
@@ -34,28 +32,13 @@ namespace Diablo2IpFinder
         {
             btnToggleOverlay.Tag = true;
 
-            m_Finder = new IpFinder(m_AppSettings.OverlayX, m_AppSettings.OverlayY, m_AppSettings.OverlayWidth, m_AppSettings.OverlayHeight, m_AppSettings.OverlayBackgroundVisible)
-            {
-                ObservedIpAddresses = m_AppSettings.ObservedIpAddresses,
-                IgnoredIpAddresses = m_AppSettings.IgnoredIpAddresses,
-                TargetIp = m_AppSettings.TargetIpAddress
-            };
+            m_Finder = new IpFinder();
             tbSetIpStatus.Text = m_Finder.TargetIp is null ? "Target IP is not set" : $"Target IP Address set to {m_Finder.TargetIp}";
             m_OverlaySettings = new OverlaySettings();
-            m_OverlaySettings.SettingsChanged += OnSettingsChanged;
-
+            m_OverlaySettings.SettingsChanged += m_Finder.OnSettingsChanged;
         }
 
-        private void OnSettingsChanged(object sender, EventArgs e)
-        {
-            m_Finder.OverlayX = m_AppSettings.OverlayX;
-            m_Finder.OverlayY = m_AppSettings.OverlayY;
-            m_Finder.OverlayWidth = m_AppSettings.OverlayWidth;
-            m_Finder.OverlayHeight = m_AppSettings.OverlayHeight;
-            m_Finder.OverlayBackgroundVisible = m_AppSettings.OverlayBackgroundVisible;
 
-            m_Finder.RearrangeOverlay();
-        }
 
         private void SetIp_Click(object sender, RoutedEventArgs e)
         {

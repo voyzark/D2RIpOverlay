@@ -6,6 +6,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using NetstatWrapper;
+using PropertyChanged;
 
 namespace Diablo2IpFinder
 {
@@ -19,6 +20,7 @@ namespace Diablo2IpFinder
         private bool m_InGame = false;
         private int m_InGameTime = 0;
         private readonly System.Timers.Timer m_InGameTimer;
+        private readonly AppSettings m_AppSettings = AppSettings.GetAppSettings;
 
         public IPAddress TargetIp { get; set; }
         public ObservableHashSet<IPAddress> ObservedIpAddresses { get; set; }
@@ -43,17 +45,20 @@ namespace Diablo2IpFinder
 
         public OverlayWindow D2Overlay { get; set; }
 
-        public IpFinder(int x, int y, int width, int height, bool bgVisible)
+        public IpFinder()
         {
-            ObservedIpAddresses = new ObservableHashSet<IPAddress>();
-            IgnoredIpAddresses = new ObservableHashSet<IPAddress>();
+            TargetIp = m_AppSettings.TargetIpAddress;
+
+            ObservedIpAddresses = m_AppSettings.ObservedIpAddresses;
+            IgnoredIpAddresses = m_AppSettings.IgnoredIpAddresses;
             CurrentIpAddresses = new ObservableHashSet<IPAddress>();
 
-            OverlayX = x;
-            OverlayY = y;
-            OverlayWidth = width;
-            OverlayHeight = height;
-            OverlayBackgroundVisible = bgVisible;
+            OverlayX = m_AppSettings.OverlayX;
+            OverlayY = m_AppSettings.OverlayY;
+            OverlayWidth = m_AppSettings.OverlayWidth;
+            OverlayHeight = m_AppSettings.OverlayHeight;
+            OverlayBackgroundVisible = m_AppSettings.OverlayBackgroundVisible;
+
 
             D2Overlay = new OverlayWindow(OverlayX, OverlayY, OverlayWidth, OverlayHeight, OverlayBackgroundVisible);
             Task.Run(() => D2Overlay.Run());
@@ -72,7 +77,7 @@ namespace Diablo2IpFinder
         {
             while (true)
             {
-                UpdateIpsNetstat();
+                UpdateIps();
                 SynchronizeCollections();
                 UpdateTimer();
                 UpdateOverlay();
@@ -81,13 +86,17 @@ namespace Diablo2IpFinder
             }
         }
 
-        private void UpdateIpsNetstat()
+        private void UpdateIps()
         {
-            var procId = Process.GetProcessesByName(m_DiabloExecutable).First().Id;
+            var processes = Process.GetProcessesByName(m_DiabloExecutable);
+            if (processes.Length == 0)
+                return;
+
+            var procId = processes.First().Id;
 
             var observedIPs = Netstat.GetExtendedTcpTable()
-                                     .Where(con => !Helpers.IsFilteredIp(con.RemoteAddress) && 
-                                            con.ProcessId == procId)
+                                     .Where(con => !Helpers.IsFilteredIp(con.RemoteAddress) &&
+                                            con.ProcessId == 1234)
                                      .Select(con => con.RemoteAddress);
 
             CurrentIpAddresses.Clear();
@@ -144,6 +153,17 @@ namespace Diablo2IpFinder
 
                 if (!m_InGameTimer.Enabled) m_InGameTimer.Start();
             }
+        }
+
+        public void OnSettingsChanged(object sender, EventArgs e)
+        {
+            OverlayX = m_AppSettings.OverlayX;
+            OverlayY = m_AppSettings.OverlayY;
+            OverlayWidth = m_AppSettings.OverlayWidth;
+            OverlayHeight = m_AppSettings.OverlayHeight;
+            OverlayBackgroundVisible = m_AppSettings.OverlayBackgroundVisible;
+
+            RearrangeOverlay();
         }
 
         public void HideOverlay() => D2Overlay.Hide();

@@ -6,8 +6,8 @@ namespace NetstatWrapper
 {
     public class TcpConnectionInfo
     {
-        private static readonly Regex re = new Regex(@"^\s*(?<Type>[^\s]*?)\s+(?<LocalIp>[^\s]*):(?<LocalPort>[^\s]*?)\s+(?<RemoteIp>[^\s]*):(?<RemotePort>[^\s]*?)\s+(?<State>[^\s]*)\s+(?<ProcId>[^\s]*)\s*$");
-        private static Regex ValidIpSchema = new Regex(@"^(?:[0-9]{1,3}\.){3}([0-9]{1,3})$");
+        private static readonly Regex m_NetstatSchema = new Regex(@"^\s*(?<Type>[^\s]*?)\s+(?<LocalIp>[^\s]*):(?<LocalPort>[^\s]*?)\s+(?<RemoteIp>[^\s]*):(?<RemotePort>[^\s]*?)\s+(?<State>[^\s]*)\s+(?<ProcId>[^\s]*)\s*$");
+        private static readonly Regex m_ValidIpSchema = new Regex(@"^(?:[0-9]{1,3}\.){3}([0-9]{1,3})$");
 
         public IPAddress LocalAddress { get; set; }
         public IPAddress RemoteAddress { get; set; }
@@ -23,7 +23,7 @@ namespace NetstatWrapper
         internal static bool TryParse(string inputLine, out TcpConnectionInfo tcpConnectionInfo)
         {
             tcpConnectionInfo = new TcpConnectionInfo();
-            var match = re.Match(inputLine);
+            var match = m_NetstatSchema.Match(inputLine);
 
             if (!match.Success)
                 return false;
@@ -50,7 +50,7 @@ namespace NetstatWrapper
 
         private static bool IsValidIp(string ipAddress)
         {
-            var match = ValidIpSchema.Match(ipAddress);
+            var match = m_ValidIpSchema.Match(ipAddress);
             return match.Success;
         }
     }

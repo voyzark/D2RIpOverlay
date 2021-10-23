@@ -62,9 +62,9 @@ namespace Diablo2IpFinder
                 IsVisible = true
             };
 
-            m_Window.SetupGraphics += m_Window_SetupGraphics;
-            m_Window.DrawGraphics += m_Window_DrawGraphics;
-            m_Window.DestroyGraphics += m_Window_DestroyGraphics;
+            m_Window.SetupGraphics += WindowSetupGraphics;
+            m_Window.DrawGraphics += WindowDrawGraphics;
+            m_Window.DestroyGraphics += WindowDestroyGraphics;
         }
 
         private void LoadSampleDefaults(bool bgVisible)
@@ -87,7 +87,7 @@ namespace Diablo2IpFinder
             RegularFont = new FontInfo(fam, sz, style, strc, weight, c);
         }
 
-        private void m_Window_SetupGraphics(object sender, SetupGraphicsEventArgs e)
+        private void WindowSetupGraphics(object sender, SetupGraphicsEventArgs e)
         {
             var gfx = e.Graphics;
 
@@ -135,7 +135,7 @@ namespace Diablo2IpFinder
             m_RegularFont = new Font(rfTextFormat);
         }
 
-        private void m_Window_DestroyGraphics(object sender, DestroyGraphicsEventArgs e)
+        private void WindowDestroyGraphics(object sender, DestroyGraphicsEventArgs e)
         {
             m_BackgroundColor.Dispose();
             m_HeadlineFontColor.Dispose();
@@ -146,7 +146,7 @@ namespace Diablo2IpFinder
             m_RegularFont.Dispose();
         }
 
-        private void m_Window_DrawGraphics(object sender, DrawGraphicsEventArgs e)
+        private void WindowDrawGraphics(object sender, DrawGraphicsEventArgs e)
         {
             var yOffset = 3;
             var xOffset = 3;
