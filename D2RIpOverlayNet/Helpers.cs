@@ -7,10 +7,10 @@ namespace Diablo2IpFinder
 {
     static class Helpers
     {
-        private static Regex validIpSchema = new Regex(@"^(?:[0-9]{1,3}\.){3}([0-9]{1,3})$");
-        private static IPAddress Localhost = IPAddress.Parse("127.0.0.1");
+        private static readonly Regex validIpSchema = new Regex(@"^(?:[0-9]{1,3}\.){3}([0-9]{1,3})$");
+        private static readonly IPAddress Localhost = IPAddress.Parse("127.0.0.1");
 
-        private static Regex FilteredIpRanges = new Regex(
+        private static readonly Regex FilteredIpRanges = new Regex(
             @"(?:^127\.0\.0\.1)" + "|" +
             @"(?:^24\.105\.29\.76)" + "|" +
             @"(?:^34\.117\.122\.6)" + "|" +

@@ -23,7 +23,7 @@ namespace Diablo2IpFinder
         }
         #endregion
 
-        private string m_RegistryPath = @"HKEY_CURRENT_USER\SOFTWARE\voyzark\d2ip";
+        private readonly string m_RegistryPath = @"HKEY_CURRENT_USER\SOFTWARE\voyzark\d2ip";
 
         public ObservableHashSet<IPAddress> IgnoredIpAddresses { get; set; }
         public ObservableHashSet<IPAddress> ObservedIpAddresses { get; set; }

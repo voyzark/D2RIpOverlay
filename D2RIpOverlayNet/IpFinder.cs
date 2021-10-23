@@ -18,8 +18,7 @@ namespace Diablo2IpFinder
         private readonly string m_DiabloExecutable = "D2R";
         private bool m_InGame = false;
         private int m_InGameTime = 0;
-        private System.Timers.Timer m_InGameTimer;
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly System.Timers.Timer m_InGameTimer;
 
         public IPAddress TargetIp { get; set; }
         public ObservableHashSet<IPAddress> ObservedIpAddresses { get; set; }

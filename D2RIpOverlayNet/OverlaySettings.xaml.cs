@@ -12,7 +12,7 @@ namespace Diablo2IpFinder
     {
         public EventHandler<EventArgs> SettingsChanged;
         
-        private AppSettings m_AppSettings = AppSettings.GetAppSettings;
+        private readonly AppSettings m_AppSettings = AppSettings.GetAppSettings;
         private int m_X;
         private int m_Y;
         private int m_Width;
@@ -78,7 +78,7 @@ namespace Diablo2IpFinder
             m_Y = y;
             m_Width = w;
             m_Height = h;
-            m_OverlayBackgroundTransparent = cbTv.IsChecked is null ? true : (bool)cbTv.IsChecked;
+            m_OverlayBackgroundTransparent = cbTv.IsChecked is null || (bool)cbTv.IsChecked;
 
             m_AppSettings.OverlayX = m_X;
             m_AppSettings.OverlayY = m_Y;

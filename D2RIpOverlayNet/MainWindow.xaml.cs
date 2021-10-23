@@ -15,7 +15,7 @@ namespace Diablo2IpFinder
     {
         private IpFinder m_Finder;
         private OverlaySettings m_OverlaySettings;
-        private AppSettings m_AppSettings = AppSettings.GetAppSettings;
+        private static readonly AppSettings m_AppSettings = AppSettings.GetAppSettings;
 
         public MainWindow()
         {
