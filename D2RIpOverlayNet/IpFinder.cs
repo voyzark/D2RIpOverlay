@@ -96,7 +96,7 @@ namespace Diablo2IpFinder
 
             var observedIPs = Netstat.GetExtendedTcpTable()
                                      .Where(con => !Helpers.IsFilteredIp(con.RemoteAddress) &&
-                                            con.ProcessId == 1234)
+                                            con.ProcessId == procId)
                                      .Select(con => con.RemoteAddress);
 
             CurrentIpAddresses.Clear();
