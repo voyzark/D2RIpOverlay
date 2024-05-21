@@ -8,4 +8,4 @@ Since there is now direct interaction with the game itself it should be safe to 
 This project is still very much in the alpha phase. It works, but it is missing features, will have bugs and needs refractoring. But maybe it will be useful for someone.
 
 # Archived
-Since the beginning of ladder 1 IP hunting is no longer a thing.
+Since the beginning of ladder 1 IP hunting is no longer a thing, so this is no longer useful and being archived
