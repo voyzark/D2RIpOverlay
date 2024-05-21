@@ -6,3 +6,6 @@ It works by querying all open TCP connections using GetExtendedTcpTable from iph
 Since there is now direct interaction with the game itself it should be safe to use (and hopefully not break any terms of use).
 
 This project is still very much in the alpha phase. It works, but it is missing features, will have bugs and needs refractoring. But maybe it will be useful for someone.
+
+# Archived
+Since the beginning of ladder 1 IP hunting is no longer a thing.
